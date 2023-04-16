@@ -1,7 +1,7 @@
 #include <cvzone.h>
 
 SerialData arduino(1, 1); //(numOfValsRec,digitsPerValRec)
-int values[1];
+int occupancy[1];
 int threshold = 800;
 
 // RGB format
@@ -12,21 +12,26 @@ void setup() {
   for (int i = 0; i < 6; i++) {
     pinMode(LEDs[i], OUTPUT);
   }
-  // arduino.begin();
+  arduino.begin();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   int LightIntensity = analogRead(A0); // 0-1023
-  if (LightIntensity < threshold){
+  if (LightIntensity < threshold) { // Dim
+      arduino.Get(occupancy); // Get occupancy status
+      if (occupancy[0] == 1){ // Have people
+        for (int i = 0; i < 6; i++) {
+          digitalWrite(LEDs[i], 1); // Lights ON
+        }
+      } else { // No People
+          for (int i = 0; i < 6; i++) {
+            digitalWrite(LEDs[i], 0); //Lights OFF
+          }
+        }
+  } else { // Bright
       for (int i = 0; i < 6; i++) {
-        digitalWrite(LEDs[i], 1);
-      }
-  } else {
-      for (int i = 0; i < 6; i++) {
-          digitalWrite(LEDs[i], 0);
+          digitalWrite(LEDs[i], 0); // Lights OFF
       }
   }
-
-  // arduino.Get(values);
 }
