@@ -33,7 +33,7 @@ def display_cam():
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     # YOLO Prediction
-    results = yolo.predict(img)
+    results = yolo.predict(img, verbose=False)
 
     for r in results:
         annotator = Annotator(img)
